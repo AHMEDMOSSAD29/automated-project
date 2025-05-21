@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout from Git') {
+            steps {
+                git(url: 'https://github.com/AHMEDMOSSAD29/automated-project.git', branch: 'main')
+            }
+        }
+        stage('Navigate to Terraform Directory') {
+            steps {
+                script {
+                    sh 'pwd' // Optional: Verify the current working directory
+                }
+            }
+        }
+        stage('Initialize Terraform') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
+                                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
+                                 credentialsId: 'aws-credentials']]) {
+                    script {
+                        sh 'terraform init'
+                        sh 'terraform plan -var-file dev.tfvars'
+                        //sh 'terraform apply -auto-approve -var-file dev.tfvars'
+                        // sh 'terraform destroy -auto-approve -var-file dev.tfvars'
+                    }
+                }
+            }
+        }
+    }
+}
