@@ -1,0 +1,13 @@
+
+# Running the Container 
+
+ docker run -d \
+   --name jenkins-terraform \
+   -p 8080:8080 \
+   -p 50000:50000 \
+   -v /home/ahmed/DevOps/projects/terrafrom/jenkins/data:/var/jenkins_home \
+   -v /var/run/docker.sock:/var/run/docker.sock \
+    jenkins-terraform:latest
+
+#   docker exec jenkins-terraform cat /var/jenkins_home/secrets/initialAdminPassword
+ 

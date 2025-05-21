@@ -1,0 +1,21 @@
+---
+- name: Configure Jenkins Slave
+  hosts: all
+  become: yes
+  remote_user: ubuntu
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+
+    - name: Create working directory for Jenkins slave
+      file:
+        path: /home/ubuntu/jenkins_home
+        state: directory
+        mode: "0777"
+
+    - name: Install OpenJDK
+      apt:
+        name: openjdk-11-jdk
+        state: present
+          #ansible-playbook -i inventory --private-key agent-01.pem slave.yaml
